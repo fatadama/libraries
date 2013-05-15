@@ -4,7 +4,7 @@
 
 typedef struct __mavlink_vscl_test_t
 {
- uint16_t dummy; ///< A dummy value, the MAV will echo it.
+ int16_t dummy; ///< A dummy value, the MAV will echo it.
 } mavlink_vscl_test_t;
 
 #define MAVLINK_MSG_ID_VSCL_TEST_LEN 2
@@ -15,7 +15,7 @@ typedef struct __mavlink_vscl_test_t
 #define MAVLINK_MESSAGE_INFO_VSCL_TEST { \
 	"VSCL_TEST", \
 	1, \
-	{  { "dummy", NULL, MAVLINK_TYPE_UINT16_T, 0, 0, offsetof(mavlink_vscl_test_t, dummy) }, \
+	{  { "dummy", NULL, MAVLINK_TYPE_INT16_T, 0, 0, offsetof(mavlink_vscl_test_t, dummy) }, \
          } \
 }
 
@@ -30,11 +30,11 @@ typedef struct __mavlink_vscl_test_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_vscl_test_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       uint16_t dummy)
+						       int16_t dummy)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[2];
-	_mav_put_uint16_t(buf, 0, dummy);
+	_mav_put_int16_t(buf, 0, dummy);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 2);
 #else
@@ -45,7 +45,7 @@ static inline uint16_t mavlink_msg_vscl_test_pack(uint8_t system_id, uint8_t com
 #endif
 
 	msg->msgid = MAVLINK_MSG_ID_VSCL_TEST;
-	return mavlink_finalize_message(msg, system_id, component_id, 2, 144);
+	return mavlink_finalize_message(msg, system_id, component_id, 2, 87);
 }
 
 /**
@@ -59,11 +59,11 @@ static inline uint16_t mavlink_msg_vscl_test_pack(uint8_t system_id, uint8_t com
  */
 static inline uint16_t mavlink_msg_vscl_test_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           uint16_t dummy)
+						           int16_t dummy)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[2];
-	_mav_put_uint16_t(buf, 0, dummy);
+	_mav_put_int16_t(buf, 0, dummy);
 
         memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 2);
 #else
@@ -74,7 +74,7 @@ static inline uint16_t mavlink_msg_vscl_test_pack_chan(uint8_t system_id, uint8_
 #endif
 
 	msg->msgid = MAVLINK_MSG_ID_VSCL_TEST;
-	return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 2, 144);
+	return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 2, 87);
 }
 
 /**
@@ -98,18 +98,18 @@ static inline uint16_t mavlink_msg_vscl_test_encode(uint8_t system_id, uint8_t c
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_vscl_test_send(mavlink_channel_t chan, uint16_t dummy)
+static inline void mavlink_msg_vscl_test_send(mavlink_channel_t chan, int16_t dummy)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
 	char buf[2];
-	_mav_put_uint16_t(buf, 0, dummy);
+	_mav_put_int16_t(buf, 0, dummy);
 
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_VSCL_TEST, buf, 2, 144);
+	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_VSCL_TEST, buf, 2, 87);
 #else
 	mavlink_vscl_test_t packet;
 	packet.dummy = dummy;
 
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_VSCL_TEST, (const char *)&packet, 2, 144);
+	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_VSCL_TEST, (const char *)&packet, 2, 87);
 #endif
 }
 
@@ -123,9 +123,9 @@ static inline void mavlink_msg_vscl_test_send(mavlink_channel_t chan, uint16_t d
  *
  * @return A dummy value, the MAV will echo it.
  */
-static inline uint16_t mavlink_msg_vscl_test_get_dummy(const mavlink_message_t* msg)
+static inline int16_t mavlink_msg_vscl_test_get_dummy(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_uint16_t(msg,  0);
+	return _MAV_RETURN_int16_t(msg,  0);
 }
 
 /**
