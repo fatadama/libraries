@@ -4,7 +4,7 @@
 
 typedef struct __mavlink_vscl_test_t
 {
- int16_t dummy; ///< A dummy value, the MAV will echo it.
+ int16_t dummy; ///< Change in target bank angle for the MAV.
 } mavlink_vscl_test_t;
 
 #define MAVLINK_MSG_ID_VSCL_TEST_LEN 2
@@ -26,7 +26,7 @@ typedef struct __mavlink_vscl_test_t
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param msg The MAVLink message to compress the data into
  *
- * @param dummy A dummy value, the MAV will echo it.
+ * @param dummy Change in target bank angle for the MAV.
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_vscl_test_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
@@ -54,7 +54,7 @@ static inline uint16_t mavlink_msg_vscl_test_pack(uint8_t system_id, uint8_t com
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param chan The MAVLink channel this message was sent over
  * @param msg The MAVLink message to compress the data into
- * @param dummy A dummy value, the MAV will echo it.
+ * @param dummy Change in target bank angle for the MAV.
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_vscl_test_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
@@ -94,7 +94,7 @@ static inline uint16_t mavlink_msg_vscl_test_encode(uint8_t system_id, uint8_t c
  * @brief Send a vscl_test message
  * @param chan MAVLink channel to send the message
  *
- * @param dummy A dummy value, the MAV will echo it.
+ * @param dummy Change in target bank angle for the MAV.
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
@@ -121,7 +121,7 @@ static inline void mavlink_msg_vscl_test_send(mavlink_channel_t chan, int16_t du
 /**
  * @brief Get field dummy from vscl_test message
  *
- * @return A dummy value, the MAV will echo it.
+ * @return Change in target bank angle for the MAV.
  */
 static inline int16_t mavlink_msg_vscl_test_get_dummy(const mavlink_message_t* msg)
 {
