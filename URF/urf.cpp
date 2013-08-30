@@ -8,7 +8,8 @@ function definitions for ultrasonic rangefinder class object
 
 //scale factor for reading PWM inputs - constant for MB12## series rangefinders in PWM output mode
 //static const float scaling = 0.017241;//scale factor in cm/microsecond
-static const float scaling = 1.0;//scale factor for analog reading
+static const float VCC = 5;//expected APM2 VCC output
+static const float scaling = 5/VCC;//scale factor for analog reading
 
 URF::URF()
 {
