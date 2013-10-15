@@ -4,6 +4,7 @@
 
 typedef struct __mavlink_vscl_autoland_t
 {
+ int32_t time; ///< CPU time in milliseconds.
  int16_t psi; ///< Reference heading (mrad).
  int16_t theta; ///< Reference pitch (mrad).
  int16_t phi; ///< Reference bank (mrad).
@@ -12,20 +13,21 @@ typedef struct __mavlink_vscl_autoland_t
  int16_t aile; ///< Aileron setting (cd).
 } mavlink_vscl_autoland_t;
 
-#define MAVLINK_MSG_ID_VSCL_AUTOLAND_LEN 12
-#define MAVLINK_MSG_ID_203_LEN 12
+#define MAVLINK_MSG_ID_VSCL_AUTOLAND_LEN 16
+#define MAVLINK_MSG_ID_203_LEN 16
 
 
 
 #define MAVLINK_MESSAGE_INFO_VSCL_AUTOLAND { \
 	"VSCL_AUTOLAND", \
-	6, \
-	{  { "psi", NULL, MAVLINK_TYPE_INT16_T, 0, 0, offsetof(mavlink_vscl_autoland_t, psi) }, \
-         { "theta", NULL, MAVLINK_TYPE_INT16_T, 0, 2, offsetof(mavlink_vscl_autoland_t, theta) }, \
-         { "phi", NULL, MAVLINK_TYPE_INT16_T, 0, 4, offsetof(mavlink_vscl_autoland_t, phi) }, \
-         { "elev", NULL, MAVLINK_TYPE_INT16_T, 0, 6, offsetof(mavlink_vscl_autoland_t, elev) }, \
-         { "thto", NULL, MAVLINK_TYPE_INT16_T, 0, 8, offsetof(mavlink_vscl_autoland_t, thto) }, \
-         { "aile", NULL, MAVLINK_TYPE_INT16_T, 0, 10, offsetof(mavlink_vscl_autoland_t, aile) }, \
+	7, \
+	{  { "time", NULL, MAVLINK_TYPE_INT32_T, 0, 0, offsetof(mavlink_vscl_autoland_t, time) }, \
+         { "psi", NULL, MAVLINK_TYPE_INT16_T, 0, 4, offsetof(mavlink_vscl_autoland_t, psi) }, \
+         { "theta", NULL, MAVLINK_TYPE_INT16_T, 0, 6, offsetof(mavlink_vscl_autoland_t, theta) }, \
+         { "phi", NULL, MAVLINK_TYPE_INT16_T, 0, 8, offsetof(mavlink_vscl_autoland_t, phi) }, \
+         { "elev", NULL, MAVLINK_TYPE_INT16_T, 0, 10, offsetof(mavlink_vscl_autoland_t, elev) }, \
+         { "thto", NULL, MAVLINK_TYPE_INT16_T, 0, 12, offsetof(mavlink_vscl_autoland_t, thto) }, \
+         { "aile", NULL, MAVLINK_TYPE_INT16_T, 0, 14, offsetof(mavlink_vscl_autoland_t, aile) }, \
          } \
 }
 
@@ -36,6 +38,7 @@ typedef struct __mavlink_vscl_autoland_t
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param msg The MAVLink message to compress the data into
  *
+ * @param time CPU time in milliseconds.
  * @param psi Reference heading (mrad).
  * @param theta Reference pitch (mrad).
  * @param phi Reference bank (mrad).
@@ -45,20 +48,22 @@ typedef struct __mavlink_vscl_autoland_t
  * @return length of the message in bytes (excluding serial stream start sign)
  */
 static inline uint16_t mavlink_msg_vscl_autoland_pack(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg,
-						       int16_t psi, int16_t theta, int16_t phi, int16_t elev, int16_t thto, int16_t aile)
+						       int32_t time, int16_t psi, int16_t theta, int16_t phi, int16_t elev, int16_t thto, int16_t aile)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[12];
-	_mav_put_int16_t(buf, 0, psi);
-	_mav_put_int16_t(buf, 2, theta);
-	_mav_put_int16_t(buf, 4, phi);
-	_mav_put_int16_t(buf, 6, elev);
-	_mav_put_int16_t(buf, 8, thto);
-	_mav_put_int16_t(buf, 10, aile);
+	char buf[16];
+	_mav_put_int32_t(buf, 0, time);
+	_mav_put_int16_t(buf, 4, psi);
+	_mav_put_int16_t(buf, 6, theta);
+	_mav_put_int16_t(buf, 8, phi);
+	_mav_put_int16_t(buf, 10, elev);
+	_mav_put_int16_t(buf, 12, thto);
+	_mav_put_int16_t(buf, 14, aile);
 
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 12);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 16);
 #else
 	mavlink_vscl_autoland_t packet;
+	packet.time = time;
 	packet.psi = psi;
 	packet.theta = theta;
 	packet.phi = phi;
@@ -66,11 +71,11 @@ static inline uint16_t mavlink_msg_vscl_autoland_pack(uint8_t system_id, uint8_t
 	packet.thto = thto;
 	packet.aile = aile;
 
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 12);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 16);
 #endif
 
 	msg->msgid = MAVLINK_MSG_ID_VSCL_AUTOLAND;
-	return mavlink_finalize_message(msg, system_id, component_id, 12, 174);
+	return mavlink_finalize_message(msg, system_id, component_id, 16, 189);
 }
 
 /**
@@ -79,6 +84,7 @@ static inline uint16_t mavlink_msg_vscl_autoland_pack(uint8_t system_id, uint8_t
  * @param component_id ID of this component (e.g. 200 for IMU)
  * @param chan The MAVLink channel this message was sent over
  * @param msg The MAVLink message to compress the data into
+ * @param time CPU time in milliseconds.
  * @param psi Reference heading (mrad).
  * @param theta Reference pitch (mrad).
  * @param phi Reference bank (mrad).
@@ -89,20 +95,22 @@ static inline uint16_t mavlink_msg_vscl_autoland_pack(uint8_t system_id, uint8_t
  */
 static inline uint16_t mavlink_msg_vscl_autoland_pack_chan(uint8_t system_id, uint8_t component_id, uint8_t chan,
 							   mavlink_message_t* msg,
-						           int16_t psi,int16_t theta,int16_t phi,int16_t elev,int16_t thto,int16_t aile)
+						           int32_t time,int16_t psi,int16_t theta,int16_t phi,int16_t elev,int16_t thto,int16_t aile)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[12];
-	_mav_put_int16_t(buf, 0, psi);
-	_mav_put_int16_t(buf, 2, theta);
-	_mav_put_int16_t(buf, 4, phi);
-	_mav_put_int16_t(buf, 6, elev);
-	_mav_put_int16_t(buf, 8, thto);
-	_mav_put_int16_t(buf, 10, aile);
+	char buf[16];
+	_mav_put_int32_t(buf, 0, time);
+	_mav_put_int16_t(buf, 4, psi);
+	_mav_put_int16_t(buf, 6, theta);
+	_mav_put_int16_t(buf, 8, phi);
+	_mav_put_int16_t(buf, 10, elev);
+	_mav_put_int16_t(buf, 12, thto);
+	_mav_put_int16_t(buf, 14, aile);
 
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 12);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), buf, 16);
 #else
 	mavlink_vscl_autoland_t packet;
+	packet.time = time;
 	packet.psi = psi;
 	packet.theta = theta;
 	packet.phi = phi;
@@ -110,11 +118,11 @@ static inline uint16_t mavlink_msg_vscl_autoland_pack_chan(uint8_t system_id, ui
 	packet.thto = thto;
 	packet.aile = aile;
 
-        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 12);
+        memcpy(_MAV_PAYLOAD_NON_CONST(msg), &packet, 16);
 #endif
 
 	msg->msgid = MAVLINK_MSG_ID_VSCL_AUTOLAND;
-	return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 12, 174);
+	return mavlink_finalize_message_chan(msg, system_id, component_id, chan, 16, 189);
 }
 
 /**
@@ -127,13 +135,14 @@ static inline uint16_t mavlink_msg_vscl_autoland_pack_chan(uint8_t system_id, ui
  */
 static inline uint16_t mavlink_msg_vscl_autoland_encode(uint8_t system_id, uint8_t component_id, mavlink_message_t* msg, const mavlink_vscl_autoland_t* vscl_autoland)
 {
-	return mavlink_msg_vscl_autoland_pack(system_id, component_id, msg, vscl_autoland->psi, vscl_autoland->theta, vscl_autoland->phi, vscl_autoland->elev, vscl_autoland->thto, vscl_autoland->aile);
+	return mavlink_msg_vscl_autoland_pack(system_id, component_id, msg, vscl_autoland->time, vscl_autoland->psi, vscl_autoland->theta, vscl_autoland->phi, vscl_autoland->elev, vscl_autoland->thto, vscl_autoland->aile);
 }
 
 /**
  * @brief Send a vscl_autoland message
  * @param chan MAVLink channel to send the message
  *
+ * @param time CPU time in milliseconds.
  * @param psi Reference heading (mrad).
  * @param theta Reference pitch (mrad).
  * @param phi Reference bank (mrad).
@@ -143,20 +152,22 @@ static inline uint16_t mavlink_msg_vscl_autoland_encode(uint8_t system_id, uint8
  */
 #ifdef MAVLINK_USE_CONVENIENCE_FUNCTIONS
 
-static inline void mavlink_msg_vscl_autoland_send(mavlink_channel_t chan, int16_t psi, int16_t theta, int16_t phi, int16_t elev, int16_t thto, int16_t aile)
+static inline void mavlink_msg_vscl_autoland_send(mavlink_channel_t chan, int32_t time, int16_t psi, int16_t theta, int16_t phi, int16_t elev, int16_t thto, int16_t aile)
 {
 #if MAVLINK_NEED_BYTE_SWAP || !MAVLINK_ALIGNED_FIELDS
-	char buf[12];
-	_mav_put_int16_t(buf, 0, psi);
-	_mav_put_int16_t(buf, 2, theta);
-	_mav_put_int16_t(buf, 4, phi);
-	_mav_put_int16_t(buf, 6, elev);
-	_mav_put_int16_t(buf, 8, thto);
-	_mav_put_int16_t(buf, 10, aile);
+	char buf[16];
+	_mav_put_int32_t(buf, 0, time);
+	_mav_put_int16_t(buf, 4, psi);
+	_mav_put_int16_t(buf, 6, theta);
+	_mav_put_int16_t(buf, 8, phi);
+	_mav_put_int16_t(buf, 10, elev);
+	_mav_put_int16_t(buf, 12, thto);
+	_mav_put_int16_t(buf, 14, aile);
 
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_VSCL_AUTOLAND, buf, 12, 174);
+	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_VSCL_AUTOLAND, buf, 16, 189);
 #else
 	mavlink_vscl_autoland_t packet;
+	packet.time = time;
 	packet.psi = psi;
 	packet.theta = theta;
 	packet.phi = phi;
@@ -164,7 +175,7 @@ static inline void mavlink_msg_vscl_autoland_send(mavlink_channel_t chan, int16_
 	packet.thto = thto;
 	packet.aile = aile;
 
-	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_VSCL_AUTOLAND, (const char *)&packet, 12, 174);
+	_mav_finalize_message_chan_send(chan, MAVLINK_MSG_ID_VSCL_AUTOLAND, (const char *)&packet, 16, 189);
 #endif
 }
 
@@ -174,13 +185,23 @@ static inline void mavlink_msg_vscl_autoland_send(mavlink_channel_t chan, int16_
 
 
 /**
+ * @brief Get field time from vscl_autoland message
+ *
+ * @return CPU time in milliseconds.
+ */
+static inline int32_t mavlink_msg_vscl_autoland_get_time(const mavlink_message_t* msg)
+{
+	return _MAV_RETURN_int32_t(msg,  0);
+}
+
+/**
  * @brief Get field psi from vscl_autoland message
  *
  * @return Reference heading (mrad).
  */
 static inline int16_t mavlink_msg_vscl_autoland_get_psi(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int16_t(msg,  0);
+	return _MAV_RETURN_int16_t(msg,  4);
 }
 
 /**
@@ -190,7 +211,7 @@ static inline int16_t mavlink_msg_vscl_autoland_get_psi(const mavlink_message_t*
  */
 static inline int16_t mavlink_msg_vscl_autoland_get_theta(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int16_t(msg,  2);
+	return _MAV_RETURN_int16_t(msg,  6);
 }
 
 /**
@@ -200,7 +221,7 @@ static inline int16_t mavlink_msg_vscl_autoland_get_theta(const mavlink_message_
  */
 static inline int16_t mavlink_msg_vscl_autoland_get_phi(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int16_t(msg,  4);
+	return _MAV_RETURN_int16_t(msg,  8);
 }
 
 /**
@@ -210,7 +231,7 @@ static inline int16_t mavlink_msg_vscl_autoland_get_phi(const mavlink_message_t*
  */
 static inline int16_t mavlink_msg_vscl_autoland_get_elev(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int16_t(msg,  6);
+	return _MAV_RETURN_int16_t(msg,  10);
 }
 
 /**
@@ -220,7 +241,7 @@ static inline int16_t mavlink_msg_vscl_autoland_get_elev(const mavlink_message_t
  */
 static inline int16_t mavlink_msg_vscl_autoland_get_thto(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int16_t(msg,  8);
+	return _MAV_RETURN_int16_t(msg,  12);
 }
 
 /**
@@ -230,7 +251,7 @@ static inline int16_t mavlink_msg_vscl_autoland_get_thto(const mavlink_message_t
  */
 static inline int16_t mavlink_msg_vscl_autoland_get_aile(const mavlink_message_t* msg)
 {
-	return _MAV_RETURN_int16_t(msg,  10);
+	return _MAV_RETURN_int16_t(msg,  14);
 }
 
 /**
@@ -242,6 +263,7 @@ static inline int16_t mavlink_msg_vscl_autoland_get_aile(const mavlink_message_t
 static inline void mavlink_msg_vscl_autoland_decode(const mavlink_message_t* msg, mavlink_vscl_autoland_t* vscl_autoland)
 {
 #if MAVLINK_NEED_BYTE_SWAP
+	vscl_autoland->time = mavlink_msg_vscl_autoland_get_time(msg);
 	vscl_autoland->psi = mavlink_msg_vscl_autoland_get_psi(msg);
 	vscl_autoland->theta = mavlink_msg_vscl_autoland_get_theta(msg);
 	vscl_autoland->phi = mavlink_msg_vscl_autoland_get_phi(msg);
@@ -249,6 +271,6 @@ static inline void mavlink_msg_vscl_autoland_decode(const mavlink_message_t* msg
 	vscl_autoland->thto = mavlink_msg_vscl_autoland_get_thto(msg);
 	vscl_autoland->aile = mavlink_msg_vscl_autoland_get_aile(msg);
 #else
-	memcpy(vscl_autoland, _MAV_PAYLOAD(msg), 12);
+	memcpy(vscl_autoland, _MAV_PAYLOAD(msg), 16);
 #endif
 }
