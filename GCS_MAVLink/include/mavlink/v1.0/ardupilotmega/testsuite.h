@@ -1330,10 +1330,14 @@ static void mavlink_test_vscl_autoland(uint8_t system_id, uint8_t component_id, 
 	17755,
 	17859,
 	17963,
+	18067,
+	18171,
 	};
 	mavlink_vscl_autoland_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
         	packet1.time = packet_in.time;
+        	packet1.gamm = packet_in.gamm;
+        	packet1.lambd = packet_in.lambd;
         	packet1.psi = packet_in.psi;
         	packet1.theta = packet_in.theta;
         	packet1.phi = packet_in.phi;
@@ -1349,12 +1353,12 @@ static void mavlink_test_vscl_autoland(uint8_t system_id, uint8_t component_id, 
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-	mavlink_msg_vscl_autoland_pack(system_id, component_id, &msg , packet1.time , packet1.psi , packet1.theta , packet1.phi , packet1.elev , packet1.thto , packet1.aile );
+	mavlink_msg_vscl_autoland_pack(system_id, component_id, &msg , packet1.time , packet1.gamm , packet1.lambd , packet1.psi , packet1.theta , packet1.phi , packet1.elev , packet1.thto , packet1.aile );
 	mavlink_msg_vscl_autoland_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
         memset(&packet2, 0, sizeof(packet2));
-	mavlink_msg_vscl_autoland_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.time , packet1.psi , packet1.theta , packet1.phi , packet1.elev , packet1.thto , packet1.aile );
+	mavlink_msg_vscl_autoland_pack_chan(system_id, component_id, MAVLINK_COMM_0, &msg , packet1.time , packet1.gamm , packet1.lambd , packet1.psi , packet1.theta , packet1.phi , packet1.elev , packet1.thto , packet1.aile );
 	mavlink_msg_vscl_autoland_decode(&msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 
@@ -1367,7 +1371,7 @@ static void mavlink_test_vscl_autoland(uint8_t system_id, uint8_t component_id, 
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
         
         memset(&packet2, 0, sizeof(packet2));
-	mavlink_msg_vscl_autoland_send(MAVLINK_COMM_1 , packet1.time , packet1.psi , packet1.theta , packet1.phi , packet1.elev , packet1.thto , packet1.aile );
+	mavlink_msg_vscl_autoland_send(MAVLINK_COMM_1 , packet1.time , packet1.gamm , packet1.lambd , packet1.psi , packet1.theta , packet1.phi , packet1.elev , packet1.thto , packet1.aile );
 	mavlink_msg_vscl_autoland_decode(last_msg, &packet2);
         MAVLINK_ASSERT(memcmp(&packet1, &packet2, sizeof(packet1)) == 0);
 }
