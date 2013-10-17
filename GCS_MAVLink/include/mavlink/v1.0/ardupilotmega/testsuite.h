@@ -1324,14 +1324,14 @@ static void mavlink_test_vscl_autoland(uint8_t system_id, uint8_t component_id, 
         uint16_t i;
 	mavlink_vscl_autoland_t packet_in = {
 		963497464,
-	17443,
-	17547,
-	17651,
-	17755,
+	963497672,
+	963497880,
 	17859,
 	17963,
 	18067,
 	18171,
+	18275,
+	18379,
 	};
 	mavlink_vscl_autoland_t packet1, packet2;
         memset(&packet1, 0, sizeof(packet1));
